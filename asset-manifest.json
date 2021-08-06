@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/rubiks-cube-simulator/static/css/main.a617e044.chunk.css",
+    "main.js": "/rubiks-cube-simulator/static/js/main.130f0704.chunk.js",
+    "main.js.map": "/rubiks-cube-simulator/static/js/main.130f0704.chunk.js.map",
+    "runtime-main.js": "/rubiks-cube-simulator/static/js/runtime-main.c5f53758.js",
+    "runtime-main.js.map": "/rubiks-cube-simulator/static/js/runtime-main.c5f53758.js.map",
+    "static/js/2.6c7dd7f1.chunk.js": "/rubiks-cube-simulator/static/js/2.6c7dd7f1.chunk.js",
+    "static/js/2.6c7dd7f1.chunk.js.map": "/rubiks-cube-simulator/static/js/2.6c7dd7f1.chunk.js.map",
+    "static/js/3.02188d63.chunk.js": "/rubiks-cube-simulator/static/js/3.02188d63.chunk.js",
+    "static/js/3.02188d63.chunk.js.map": "/rubiks-cube-simulator/static/js/3.02188d63.chunk.js.map",
+    "index.html": "/rubiks-cube-simulator/index.html",
+    "static/css/main.a617e044.chunk.css.map": "/rubiks-cube-simulator/static/css/main.a617e044.chunk.css.map",
+    "static/js/2.6c7dd7f1.chunk.js.LICENSE.txt": "/rubiks-cube-simulator/static/js/2.6c7dd7f1.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/rubiks-cube-simulator/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c5f53758.js",
+    "static/js/2.6c7dd7f1.chunk.js",
+    "static/css/main.a617e044.chunk.css",
+    "static/js/main.130f0704.chunk.js"
+  ]
+}
