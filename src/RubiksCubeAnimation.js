@@ -10,6 +10,7 @@ class RubiksCubeAnimation extends Component {
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
     this.animate = this.animate.bind(this);
+    this.updateColorMiniCube = this.updateColorMiniCube.bind(this);
   }
 
   componentDidMount() {
@@ -25,25 +26,52 @@ class RubiksCubeAnimation extends Component {
     );
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    let geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
-    let material;
-
+    let geometry;
+    const material = new THREE.MeshBasicMaterial({vertexColors: true });
+    let miniCube;
     let cubes = [];
 
     // Add each pieces
-    for (var x = 0; x < 3; x++) {
+    for (var z = 0; z < 3; z++) {
       for (var y = 0; y < 3; y++) {
-        for (var z = 0; z < 3; z++) {
+        for (var x = 0; x < 3; x++) {
+          geometry = new THREE.BoxGeometry(0.45, 0.45, 0.45).toNonIndexed();
 
-          material = new THREE.MeshNormalMaterial({ color: Math.random() * 0xffffff  })
-          let miniCube = new THREE.Mesh(geometry, material);
+          // Color faces
+          const positionAttribute = geometry.getAttribute('position');
 
-          miniCube.position.x = x * 0.5 - 0.5;
-          miniCube.position.y = y * 0.5 - 0.5;
-          miniCube.position.z = z * 0.5 - 0.5;
+          let colors = [];
+          let color = new THREE.Color();
+          
+          for (let i = 0; i < positionAttribute.count / 6; i ++) {
+            
+            let mapIdx = {
+              0: 2,
+              1: 4,
+              2: 0,
+              3: 5,
+              4: 1,
+              5: 3
+            }
 
+            let minicubeColor = this.props.rubiksCube.getColor(x + 3 * y + 9 * z, mapIdx[i]);
+            color.set(minicubeColor);
+            
+            // define the same color for each vertex of a triangle
+            for (let i = 0; i < 6; i++) {
+              colors.push( color.r, color.g, color.b );
+            }
+          }
+          
+          geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+          geometry.needsUpdate = true; 
+
+          miniCube = new THREE.Mesh(geometry, material);
+
+          miniCube.position.set(x * 0.5 - 0.5, y * 0.5 - 0.5, z * 0.5 - 0.5);
           scene.add(miniCube);
-          cubes.push(miniCube);
+          // cubes.push(miniCube);
+          cubes[x + 3 * y + 9 * z] = miniCube;
         }
       }
     }
@@ -88,8 +116,10 @@ class RubiksCubeAnimation extends Component {
   }
 
   animate() {
-    this.cubes[8].rotation.x += 0.01;
-    this.cubes[8].rotation.y += 0.05;
+    if (this.props.needsUpdate) {
+      this.props.toggleUpdate();
+      this.updateColorMiniCube();
+    }
 
     this.renderScene(this.scene, this.camera);
     this.frameId = window.requestAnimationFrame(this.animate);
@@ -105,7 +135,37 @@ class RubiksCubeAnimation extends Component {
         style={{ width: '400px', height: '400px' }}
         ref={(mount) => { this.mount = mount }}
       />
-    )
+      )
+  }
+
+  updateColorMiniCube() {
+    for (let idxMiniCube = 0; idxMiniCube < this.cubes.length; idxMiniCube++) {
+      let geometry = this.cubes[idxMiniCube].geometry;
+      const positionAttribute = geometry.getAttribute('position');
+      let colors = [];
+      let color = new THREE.Color();
+
+      for (let i = 0; i < positionAttribute.count / 6; i ++) {
+
+        let mapIdx = {
+          0: 2,
+          1: 4,
+          2: 0,
+          3: 5,
+          4: 1,
+          5: 3
+        }
+
+        let minicubeColor = this.props.rubiksCube.getColor(idxMiniCube, mapIdx[i]);
+        color.set(minicubeColor);
+        
+        for (let j = 0; j < 6; j++) {
+          colors.push( color.r, color.g, color.b );
+        }
+      }
+  
+      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    }
   }
 }
 

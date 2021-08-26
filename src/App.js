@@ -1,9 +1,11 @@
 import './App.css';
-import RubiksCubeAnimation from './RubiksCubeAnimation';
+import Controller from './Controller';
 
 function App() {
   return (
-    <RubiksCubeAnimation/>
+    <div>
+      <Controller/>
+    </div>
   );
 }
 
