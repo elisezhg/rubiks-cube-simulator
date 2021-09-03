@@ -7,7 +7,7 @@ class Controller extends Component {
   constructor(props) {
     super(props);
 
-    this.toggleUpdate = this.toggleUpdate.bind(this);
+    this.toggle = this.toggle.bind(this);
 
     // Movements
     this.turnFrontClockwise = this.turnFrontClockwise.bind(this);
@@ -23,6 +23,7 @@ class Controller extends Component {
     this.turnBackClockwise = this.turnBackClockwise.bind(this);
     this.turnBackAntiClockwise = this.turnBackAntiClockwise.bind(this);
     this.resetRubiksCube = this.resetRubiksCube.bind(this);
+
 
     this.turn = this.turn.bind(this);
 
@@ -70,70 +71,70 @@ class Controller extends Component {
     this.toggleUpdate();
   }
 
-  toggleUpdate() {
+  toggle(state) {
     this.setState({
-      needsUpdate: !this.state.needsUpdate
-    });
+      [state]: false
+    })
   }
 
   turnFrontClockwise() {
     this.state.rubiksCube.turnFrontClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateFrontClockwise: true});
   }
 
   turnFrontAntiClockwise() {
     this.state.rubiksCube.turnFrontAntiClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateFrontAntiClockwise: true});
   }
 
   turnUpClockwise() {
     this.state.rubiksCube.turnUpClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateUpClockwise: true});
   }
 
   turnUpAntiClockwise() {
     this.state.rubiksCube.turnUpAntiClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateUpAntiClockwise: true});
   }
 
   turnDownClockwise() {
     this.state.rubiksCube.turnDownClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateDownClockwise: true});
   }
 
   turnDownAntiClockwise() {
     this.state.rubiksCube.turnDownAntiClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateDownAntiClockwise: true});
   }
 
   turnLeftClockwise() {
     this.state.rubiksCube.turnLeftClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateLeftClockwise: true});
   }
 
   turnLeftAntiClockwise() {
     this.state.rubiksCube.turnLeftAntiClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateLeftAntiClockwise: true});
   }
 
   turnRightClockwise() {
     this.state.rubiksCube.turnRightClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateRightClockwise: true});
   }
 
   turnRightAntiClockwise() {
     this.state.rubiksCube.turnRightAntiClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateRightAntiClockwise: true});
   }
 
   turnBackClockwise() {
     this.state.rubiksCube.turnBackClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateBackClockwise: true});
   }
 
   turnBackAntiClockwise() {
     this.state.rubiksCube.turnBackAntiClockwise();
-    this.setState({needsUpdate: true});
+    this.setState({animateBackAntiClockwise: true});
   }
 
   render() {
@@ -155,7 +156,19 @@ class Controller extends Component {
         <RubiksCubeAnimation
           rubiksCube={this.state.rubiksCube}
           needsUpdate={this.state.needsUpdate}
-          toggleUpdate={this.toggleUpdate}
+          animateFrontClockwise={this.state.animateFrontClockwise}
+          animateFrontAntiClockwise={this.state.animateFrontAntiClockwise}
+          animateUpClockwise={this.state.animateUpClockwise}
+          animateUpAntiClockwise={this.state.animateUpAntiClockwise}
+          animateDownClockwise={this.state.animateDownClockwise}
+          animateDownAntiClockwise={this.state.animateDownAntiClockwise}
+          animateLeftClockwise={this.state.animateLeftClockwise}
+          animateLeftAntiClockwise={this.state.animateLeftAntiClockwise}
+          animateRightClockwise={this.state.animateRightClockwise}
+          animateRightAntiClockwise={this.state.animateRightAntiClockwise}
+          animateBackClockwise={this.state.animateBackClockwise}
+          animateBackAntiClockwise={this.state.animateBackAntiClockwise}
+          toggle={this.toggle}
         />
       </div>
       )
