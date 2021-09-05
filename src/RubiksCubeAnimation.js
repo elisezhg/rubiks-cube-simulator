@@ -10,7 +10,7 @@ class RubiksCubeAnimation extends Component {
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
     this.animate = this.animate.bind(this);
-    this.updateColorMiniCube = this.updateColorMiniCube.bind(this);
+    this.updateColorMiniCubes = this.updateColorMiniCubes.bind(this);
   }
 
   componentDidMount() {
@@ -103,6 +103,8 @@ class RubiksCubeAnimation extends Component {
 
     this.mount.appendChild(this.renderer.domElement);
     this.start();
+
+    this.queue = [];
   }
 
   componentWillUnmount() {
@@ -121,138 +123,167 @@ class RubiksCubeAnimation extends Component {
   }
 
   animate() {
-    // F
-    if (this.props.animateFrontClockwise) {
-      this.createFrontGroup();
-      if (Math.abs(this.FrontGroup.rotation.z) < Math.PI /2) {
-        this.FrontGroup.rotation.z -= Math.PI / 90;
-      } else {
-        this.props.toggle("animateFrontClockwise");
-        this.FrontGroup.rotation.z = 0;
-        this.updateColorMiniCube();
-        this.FrontGroup = null;
+    if (this.props.needsUpdate) {
+      this.initMoveAnimation();
+      this.props.toggleNeedsUpdate();
+    }
+
+    // Dequeue
+    if (this.props.queue.length !== 0 && !this.currentMove) {
+      let currentMove = this.props.queue.shift();
+      console.log(`animating ${currentMove}...`);
+
+      switch (currentMove) {
+        case "U":
+        case "U'":
+          this.createGroup([6, 7, 8, 15, 16, 17, 24, 25, 26]);
+          break;
+
+        case "D":
+        case "D'":
+          this.createGroup([0, 1, 2, 9, 10, 11, 18, 19, 20]);
+          break;
+        
+        case "F":
+        case "F'":
+          this.createGroup([18, 19, 20, 21, 22, 23, 24, 25, 26]);
+          break;
+        
+        case "B":
+        case "B'":
+          this.createGroup([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+          break;
+        
+        case "L":
+        case "L'":
+          this.createGroup([0, 3, 6, 9, 12, 15, 18, 21, 24]);
+          break;
+        
+        case "R":
+        case "R'":
+          this.createGroup([2, 5, 8, 11, 14, 17, 20, 23, 26]);
+          break;
+        
+        default:
+          break;
       }
-    // F'
-    } else if (this.props.animateFrontAntiClockwise) {
-      this.createFrontGroup();
-      if (Math.abs(this.FrontGroup.rotation.z) < Math.PI /2) {
-        this.FrontGroup.rotation.z += Math.PI / 90;
-      } else {
-        this.props.toggle("animateFrontAntiClockwise");
-        this.FrontGroup.rotation.z = 0;
-        this.updateColorMiniCube();
-        this.FrontGroup= null;
-      }
-    // B
-    } else if (this.props.animateBackClockwise) {
-      this.createBackGroup();
-      if (Math.abs(this.BackGroup.rotation.z) < Math.PI /2) {
-        this.BackGroup.rotation.z += Math.PI / 90;
-      } else {
-        this.props.toggle("animateBackClockwise");
-        this.BackGroup.rotation.z = 0;
-        this.updateColorMiniCube();
-        this.BackGroup= null;
-      }
-    // B'
-    } else if (this.props.animateBackAntiClockwise) {
-      this.createBackGroup();
-      if (Math.abs(this.BackGroup.rotation.z) < Math.PI /2) {
-        this.BackGroup.rotation.z -= Math.PI / 90;
-      } else {
-        this.props.toggle("animateBackAntiClockwise");
-        this.BackGroup.rotation.z = 0;
-        this.updateColorMiniCube();
-        this.BackGroup= null;
-      }
-    // L
-    } else if (this.props.animateLeftClockwise) {
-      this.createLeftGroup();
-      if (Math.abs(this.LeftGroup.rotation.x) < Math.PI /2) {
-        this.LeftGroup.rotation.x += Math.PI / 90;
-      } else {
-        this.props.toggle("animateLeftClockwise");
-        this.LeftGroup.rotation.x = 0;
-        this.updateColorMiniCube();
-        this.LeftGroup= null;
-      }
-    // L'
-    } else if (this.props.animateLeftAntiClockwise) {
-      this.createLeftGroup();
-      if (Math.abs(this.LeftGroup.rotation.x) < Math.PI /2) {
-        this.LeftGroup.rotation.x -= Math.PI / 90;
-      } else {
-        this.props.toggle("animateLeftAntiClockwise");
-        this.LeftGroup.rotation.x = 0;
-        this.updateColorMiniCube();
-        this.LeftGroup= null;
-      }
-    // R
-    } else if (this.props.animateRightClockwise) {
-      this.createRightGroup();
-      if (Math.abs(this.RightGroup.rotation.x) < Math.PI /2) {
-        this.RightGroup.rotation.x -= Math.PI / 90;
-      } else {
-        this.props.toggle("animateRightClockwise");
-        this.RightGroup.rotation.x = 0;
-        this.updateColorMiniCube();
-        this.RightGroup= null;
-      }
-    // R'
-    } else if (this.props.animateRightAntiClockwise) {
-      this.createRightGroup();
-      if (Math.abs(this.RightGroup.rotation.x) < Math.PI /2) {
-        this.RightGroup.rotation.x += Math.PI / 90;
-      } else {
-        this.props.toggle("animateRightAntiClockwise");
-        this.RightGroup.rotation.x = 0;
-        this.updateColorMiniCube();
-        this.RightGroup= null;
-      }
-    // U
-    } else if (this.props.animateUpClockwise) {
-      this.createUpGroup();
-      if (Math.abs(this.UpGroup.rotation.y) < Math.PI /2) {
-        this.UpGroup.rotation.y -= Math.PI / 90;
-      } else {
-        this.props.toggle("animateUpClockwise");
-        this.UpGroup.rotation.y = 0;
-        this.updateColorMiniCube();
-        this.UpGroup= null;
-      }
-    // U'
-    } else if (this.props.animateUpAntiClockwise) {
-      this.createUpGroup();
-      if (Math.abs(this.UpGroup.rotation.y) < Math.PI /2) {
-        this.UpGroup.rotation.y += Math.PI / 90;
-      } else {
-        this.props.toggle("animateUpAntiClockwise");
-        this.UpGroup.rotation.y = 0;
-        this.updateColorMiniCube();
-        this.UpGroup= null;
-      }
-    // D
-    } else if (this.props.animateDownClockwise) {
-      this.createDownGroup();
-      if (Math.abs(this.DownGroup.rotation.y) < Math.PI /2) {
-        this.DownGroup.rotation.y += Math.PI / 90;
-      } else {
-        this.props.toggle("animateDownClockwise");
-        this.DownGroup.rotation.y = 0;
-        this.updateColorMiniCube();
-        this.DownGroup= null;
-      }
-    // D'
-    } else if (this.props.animateDownAntiClockwise) {
-      this.createDownGroup();
-      if (Math.abs(this.DownGroup.rotation.y) < Math.PI /2) {
-        this.DownGroup.rotation.y -= Math.PI / 90;
-      } else {
-        this.props.toggle("animateDownAntiClockwise");
-        this.DownGroup.rotation.y = 0;
-        this.updateColorMiniCube();
-        this.DownGroup= null;
-      }
+
+      this.currentMove = currentMove;
+    }
+
+    // Animate current move
+    switch (this.currentMove) {
+      case "U":
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+          this.currentGroup.rotation.y -= Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnUpClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "U'":
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+          this.currentGroup.rotation.y += Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnUpAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+      
+      case "D":
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+          this.currentGroup.rotation.y += Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnDownClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+      
+      case "D'":
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+          this.currentGroup.rotation.y -= Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnDownAntiClockwise();
+          this.currentGroup.rotation.y = 0;
+          this.initMoveAnimation();
+        }
+        break;
+      
+      case "F":
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+          this.currentGroup.rotation.z -= Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnFrontClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "F'":
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+          this.currentGroup.rotation.z += Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnFrontAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "B":
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+          this.currentGroup.rotation.z += Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnBackClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "B'":
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+          this.currentGroup.rotation.z -= Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnBackAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "L":
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+          this.currentGroup.rotation.x += Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnLeftClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "L'":
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+          this.currentGroup.rotation.x -= Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnLeftAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "R":
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+          this.currentGroup.rotation.x -= Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnRightClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "R'":
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+          this.currentGroup.rotation.x += Math.PI / 90;
+        } else {
+          this.props.rubiksCube.turnRightAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      default:
+        break;
     }
 
     this.renderScene(this.scene, this.camera);
@@ -272,7 +303,7 @@ class RubiksCubeAnimation extends Component {
       )
   }
 
-  updateColorMiniCube() {
+  updateColorMiniCubes() {
     for (let idxMiniCube = 0; idxMiniCube < this.cubes.length; idxMiniCube++) {
       let geometry = this.cubes[idxMiniCube].geometry;
       const positionAttribute = geometry.getAttribute('position');
@@ -302,82 +333,20 @@ class RubiksCubeAnimation extends Component {
     }
   }
 
-  createUpGroup() {
-    if (this.UpGroup != null) return;
-    this.UpGroup = new THREE.Group();
-    this.UpGroup.add(
-      this.cubes[6], this.cubes[7], this.cubes[8],
-      this.cubes[15], this.cubes[16], this.cubes[17],
-      this.cubes[24], this.cubes[25], this.cubes[26]
-    );
-    this.scene.add(this.UpGroup);
-    this.UpGroup.position.set(0, 0, 0);
-    this.groups.push(this.UpGroup);
+  createGroup(indices) {
+    this.currentGroup = new THREE.Group();
+
+    indices.forEach(i => {
+      this.currentGroup.add(this.cubes[i])
+    });
+
+    this.scene.add(this.currentGroup);
   }
 
-  createDownGroup() {
-    if (this.DownGroup != null) return;
-    this.DownGroup = new THREE.Group();
-    this.DownGroup.add(
-      this.cubes[0], this.cubes[1], this.cubes[2],
-      this.cubes[9], this.cubes[10], this.cubes[11],
-      this.cubes[18], this.cubes[19], this.cubes[20]
-    );
-    this.scene.add(this.DownGroup);
-    this.DownGroup.position.set(0, 0, 0);
-    this.groups.push(this.DownGroup);
-  }
-
-  createLeftGroup() {
-    if (this.LeftGroup != null) return;
-    this.LeftGroup = new THREE.Group();
-    this.LeftGroup.add(
-      this.cubes[0], this.cubes[3], this.cubes[6],
-      this.cubes[9], this.cubes[12], this.cubes[15],
-      this.cubes[18], this.cubes[21], this.cubes[24]
-    );
-    this.scene.add(this.LeftGroup);
-    this.LeftGroup.position.set(0, 0, 0);
-    this.groups.push(this.LeftGroup);
-  }
-
-  createRightGroup() {
-    if (this.RightGroup != null) return;
-    this.RightGroup = new THREE.Group();
-    this.RightGroup.add(
-      this.cubes[2], this.cubes[5], this.cubes[8],
-      this.cubes[11], this.cubes[14], this.cubes[17],
-      this.cubes[20], this.cubes[23], this.cubes[26]
-    );
-    this.scene.add(this.RightGroup);
-    this.RightGroup.position.set(0, 0, 0);
-    this.groups.push(this.RightGroup);
-  }
-
-  createFrontGroup() {
-    if (this.FrontGroup != null) return;
-    this.FrontGroup = new THREE.Group();
-    this.FrontGroup.add(
-      this.cubes[18], this.cubes[19], this.cubes[20],
-      this.cubes[21], this.cubes[22], this.cubes[23],
-      this.cubes[24], this.cubes[25], this.cubes[26]
-    );
-    this.scene.add(this.FrontGroup);
-    this.FrontGroup.position.set(0, 0, 0);
-    this.groups.push(this.FrontGroup);
-  }
-
-  createBackGroup() {
-    if (this.BackGroup != null) return;
-    this.BackGroup = new THREE.Group();
-    this.BackGroup.add(
-      this.cubes[0], this.cubes[1], this.cubes[2],
-      this.cubes[3], this.cubes[4], this.cubes[5],
-      this.cubes[6], this.cubes[7], this.cubes[8]
-    );
-    this.scene.add(this.BackGroup);
-    this.BackGroup.position.set(0, 0, 0);
-    this.groups.push(this.BackGroup);
+  initMoveAnimation() {
+    this.currentMove = null;
+    this.currentGroup.rotation.set(0, 0, 0);
+    this.updateColorMiniCubes();
   }
 }
 
