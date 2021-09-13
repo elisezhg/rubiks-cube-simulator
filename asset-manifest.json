@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/rubiks-cube-simulator/static/css/main.a617e044.chunk.css",
-    "main.js": "/rubiks-cube-simulator/static/js/main.7b90118d.chunk.js",
-    "main.js.map": "/rubiks-cube-simulator/static/js/main.7b90118d.chunk.js.map",
-    "runtime-main.js": "/rubiks-cube-simulator/static/js/runtime-main.0bf41f34.js",
-    "runtime-main.js.map": "/rubiks-cube-simulator/static/js/runtime-main.0bf41f34.js.map",
+    "main.js": "/rubiks-cube-simulator/static/js/main.eae8482d.chunk.js",
+    "main.js.map": "/rubiks-cube-simulator/static/js/main.eae8482d.chunk.js.map",
+    "runtime-main.js": "/rubiks-cube-simulator/static/js/runtime-main.4c6a5eb5.js",
+    "runtime-main.js.map": "/rubiks-cube-simulator/static/js/runtime-main.4c6a5eb5.js.map",
     "static/js/2.e5d182c0.chunk.js": "/rubiks-cube-simulator/static/js/2.e5d182c0.chunk.js",
     "static/js/2.e5d182c0.chunk.js.map": "/rubiks-cube-simulator/static/js/2.e5d182c0.chunk.js.map",
-    "static/js/3.0549e4cd.chunk.js": "/rubiks-cube-simulator/static/js/3.0549e4cd.chunk.js",
-    "static/js/3.0549e4cd.chunk.js.map": "/rubiks-cube-simulator/static/js/3.0549e4cd.chunk.js.map",
+    "static/js/3.2408fb2a.chunk.js": "/rubiks-cube-simulator/static/js/3.2408fb2a.chunk.js",
+    "static/js/3.2408fb2a.chunk.js.map": "/rubiks-cube-simulator/static/js/3.2408fb2a.chunk.js.map",
     "index.html": "/rubiks-cube-simulator/index.html",
     "static/css/main.a617e044.chunk.css.map": "/rubiks-cube-simulator/static/css/main.a617e044.chunk.css.map",
     "static/js/2.e5d182c0.chunk.js.LICENSE.txt": "/rubiks-cube-simulator/static/js/2.e5d182c0.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.0bf41f34.js",
+    "static/js/runtime-main.4c6a5eb5.js",
     "static/js/2.e5d182c0.chunk.js",
     "static/css/main.a617e044.chunk.css",
-    "static/js/main.7b90118d.chunk.js"
+    "static/js/main.eae8482d.chunk.js"
   ]
 }
