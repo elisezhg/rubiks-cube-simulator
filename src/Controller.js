@@ -8,6 +8,9 @@ class Controller extends Component {
     super(props);
 
     this.toggleNeedsUpdate = this.toggleNeedsUpdate.bind(this);
+    this.resetRubiksCube = this.resetRubiksCube.bind(this);
+    this.generateScramble = this.generateScramble.bind(this);
+    this.scramble = this.scramble.bind(this);
 
     // Movements
     this.turnFrontClockwise = this.turnFrontClockwise.bind(this);
@@ -22,8 +25,6 @@ class Controller extends Component {
     this.turnRightAntiClockwise = this.turnRightAntiClockwise.bind(this);
     this.turnBackClockwise = this.turnBackClockwise.bind(this);
     this.turnBackAntiClockwise = this.turnBackAntiClockwise.bind(this);
-    this.resetRubiksCube = this.resetRubiksCube.bind(this);
-
 
     this.turn = this.turn.bind(this);
 
@@ -35,11 +36,11 @@ class Controller extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('keydown', this.turn)
+    window.addEventListener('keydown', this.turn);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.turn)
+    window.removeEventListener('keydown', this.turn);
   }
 
   turn(event) {
@@ -65,6 +66,46 @@ class Controller extends Component {
       default:
         console.log("not recognized");
     }
+  }
+
+  scramble() {
+    if (!this.state.scramble) {
+      alert("Please generate a scramble first!");
+    } else {
+      let moves = this.state.scramble.split(" ");
+      
+      moves.forEach(m => {
+        if (m.slice(1) === "2") {
+          this.state.queue.push(m.slice(0, 1));
+          this.state.queue.push(m.slice(0, 1));
+        } else {
+          this.state.queue.push(m);
+        }
+      });
+    }
+  }
+
+  generateScramble() {
+
+    let generatedMoves = [];
+
+    let possibleMoves = ["F", "B", "L", "R", "U", "D"];
+    let possibleVariations = ["", "'", "2"];
+
+    for (let i = 0; i < 25; i++) {
+      let randomMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+      
+      while (generatedMoves.length !== 0 && randomMove === generatedMoves.slice(-1)[0].slice(0,1)) {
+        randomMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+      }
+
+      randomMove += possibleVariations[Math.floor(Math.random() * possibleVariations.length)];
+      generatedMoves.push(randomMove);
+    }      
+
+    this.setState({
+      scramble: generatedMoves.join(" ")
+    })
   }
 
   resetRubiksCube() {
@@ -145,6 +186,9 @@ class Controller extends Component {
         <button type="button" onClick={() => this.turnBackClockwise()}>B</button>
         <button type="button" onClick={() => this.turnBackAntiClockwise()}>B'</button>
         <button type="button" onClick={() => this.resetRubiksCube()}>Reset</button>
+        <button type="button" onClick={() => this.generateScramble()}>Generate Scramble</button>
+        <button type="button" onClick={() => this.scramble()}>Scramble</button>
+        <p id="scramble">{this.state.scramble}</p>
         <RubiksCubeAnimation
           rubiksCube={this.state.rubiksCube}
           needsUpdate={this.state.needsUpdate}
