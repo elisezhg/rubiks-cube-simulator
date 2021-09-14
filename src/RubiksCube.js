@@ -56,7 +56,7 @@ class RubiksCube {
 
   getColor(miniCubeIndex, faceIndex) {
     let colorIndex = this.miniCubesMapping[miniCubeIndex][faceIndex];
-    return colorIndex != null? this.state[faceIndex][colorIndex] : 0x999999;
+    return colorIndex != null? this.state[faceIndex][colorIndex] : 0x000000;
   }
 
   turnFrontClockwise() {
@@ -376,4 +376,4 @@ class RubiksCube {
   }
 }
 
-module.exports = RubiksCube;
+export default RubiksCube;

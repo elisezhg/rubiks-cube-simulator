@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { DragControls } from 'three/examples/jsm/controls/DragControls';
 
 class RubiksCubeAnimation extends Component {
   constructor(props) {
@@ -18,6 +17,8 @@ class RubiksCubeAnimation extends Component {
     const height = window.innerHeight;
 
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x16181a);
+
     const camera = new THREE.PerspectiveCamera(
       75,
       width / height,
@@ -26,15 +27,19 @@ class RubiksCubeAnimation extends Component {
     );
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
+
     let geometry;
     const material = new THREE.MeshBasicMaterial({vertexColors: true});
     let miniCube;
     let cubes = [];
+    let cubeBorders = [];
 
     // Add each pieces
     for (var z = 0; z < 3; z++) {
       for (var y = 0; y < 3; y++) {
         for (var x = 0; x < 3; x++) {
+          let idx = x + 3 * y + 9 * z;
+
           geometry = new THREE.BoxGeometry(1, 1, 1).toNonIndexed();
 
           // Color faces
@@ -54,7 +59,7 @@ class RubiksCubeAnimation extends Component {
               5: 3
             }
 
-            let minicubeColor = this.props.rubiksCube.getColor(x + 3 * y + 9 * z, mapIdx[i]);
+            let minicubeColor = this.props.rubiksCube.getColor(idx, mapIdx[i]);
             color.set(minicubeColor);
             
             // define the same color for each vertex of a triangle
@@ -68,38 +73,36 @@ class RubiksCubeAnimation extends Component {
 
           miniCube = new THREE.Mesh(geometry, material);
 
-          // miniCube.position.set(x * 0.5 - 0.5, y * 0.5 - 0.5, z * 0.5 - 0.5);
           miniCube.position.set(x - 1, y - 1, z - 1);
           scene.add(miniCube);
-          // cubes.push(miniCube);
-          cubes[x + 3 * y + 9 * z] = miniCube;
+          cubes[idx] = miniCube;
+
+          // Cube Border
+          const thresholdAngle = 15;
+          const edges = new THREE.EdgesGeometry(geometry, thresholdAngle);
+          const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial({color: 0x000000, linewidth: 2}));
+          
+          line.position.set(x - 1, y - 1, z - 1);
+          scene.add(line);
+          cubeBorders[idx] = line;
         }
       }
     }
 
-    camera.position.z = 8;
+    camera.position.set(-5, 3, 5);
     renderer.setSize(width, height);
 
     // Ortbit Controls
 		const orbitControls = new OrbitControls(camera, renderer.domElement);
     orbitControls.rotateSpeed = 0.4;
-    
-    // Drag Controls
-    let groups = [];
-    this.groups = groups;
-		const dragControls = new DragControls(groups, camera, renderer.domElement);
-    dragControls.addEventListener('dragstart', function () {orbitControls.enabled = false;});
-		dragControls.addEventListener('dragend', function () {orbitControls.enabled = true;});
-		// dragControls.addEventListener('drag', function (event) {event.object.position.z = 0; event.object.position.x = 0;});
-    // dragControls.transformGroup = true;
 
     this.scene = scene;
     this.camera = camera;
     this.renderer = renderer;
     this.material = material;
     this.cubes = cubes;
+    this.cubeBorders = cubeBorders;
     this.orbitControls = orbitControls;
-    this.dragControls = dragControls;
 
     this.mount.appendChild(this.renderer.domElement);
     this.start();
@@ -338,6 +341,7 @@ class RubiksCubeAnimation extends Component {
 
     indices.forEach(i => {
       this.currentGroup.add(this.cubes[i])
+      this.currentGroup.add(this.cubeBorders[i])
     });
 
     this.scene.add(this.currentGroup);

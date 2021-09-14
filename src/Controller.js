@@ -1,7 +1,6 @@
 import { Component } from "react";
 import RubiksCubeAnimation from "./RubiksCubeAnimation";
-
-const RubiksCube = require("./RubiksCube");
+import RubiksCube from "./RubiksCube";
 
 class Controller extends Component {
   constructor(props) {
