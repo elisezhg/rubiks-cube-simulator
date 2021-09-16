@@ -18,11 +18,11 @@ class RubiksCubeSolver {
   convertStateToString(state) {
     const mappingColorToLetter = {
       0xffffff: "U",
-      0x00ff00: "F",
-      0xff0000: "R",
-      0x0000ff: "B",
-      0xffa500: "L",
-      0xffff00: "D"
+      0xbaff29: "F",
+      0xff101f: "R",
+      0x0081a7: "B",
+      0xffbc40: "L",
+      0xffff66: "D"
     }
 
     state = state.map(face => {
