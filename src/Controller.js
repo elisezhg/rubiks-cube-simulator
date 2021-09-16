@@ -1,6 +1,7 @@
 import { Component } from "react";
 import RubiksCubeAnimation from "./RubiksCubeAnimation";
 import RubiksCube from "./RubiksCube";
+import RubiksCubeSolver from "./RubiksCubeSolver";
 
 class Controller extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Controller extends Component {
     this.resetRubiksCube = this.resetRubiksCube.bind(this);
     this.generateScramble = this.generateScramble.bind(this);
     this.scramble = this.scramble.bind(this);
+    this.solve = this.solve.bind(this);
 
     // Movements
     this.turnFrontClockwise = this.turnFrontClockwise.bind(this);
@@ -29,6 +31,7 @@ class Controller extends Component {
 
     this.state = {
       rubiksCube: new RubiksCube(),
+      rubiksCubeSolver: new RubiksCubeSolver(),
       needsUpdate: false,
       queue: []
     };
@@ -67,21 +70,30 @@ class Controller extends Component {
     }
   }
 
+  solve() {
+    let solution = this.state.rubiksCubeSolver.solve(this.state.rubiksCube);
+    
+    this.queueUpMoves(solution);
+  }
+
   scramble() {
     if (!this.state.scramble) {
       alert("Please generate a scramble first!");
     } else {
-      let moves = this.state.scramble.split(" ");
-      
-      moves.forEach(m => {
-        if (m.slice(1) === "2") {
-          this.state.queue.push(m.slice(0, 1));
-          this.state.queue.push(m.slice(0, 1));
-        } else {
-          this.state.queue.push(m);
-        }
-      });
+      this.queueUpMoves(this.state.scramble);
     }
+  }
+
+  queueUpMoves(scramble) {
+    let moves = scramble.split(" ");
+
+    moves.forEach(m => {
+      if (m.slice(1) === "2") {
+        this.state.queue.push(m.slice(0, 1));
+      }
+
+      this.state.queue.push(m.slice(0, 1));
+    });
   }
 
   generateScramble() {
@@ -187,6 +199,7 @@ class Controller extends Component {
         <button type="button" onClick={() => this.resetRubiksCube()}>Reset</button>
         <button type="button" onClick={() => this.generateScramble()}>Generate Scramble</button>
         <button type="button" onClick={() => this.scramble()}>Scramble</button>
+        <button type="button" onClick={() => this.solve()}>Solve</button>
         <p id="scramble">{this.state.scramble}</p>
         <RubiksCubeAnimation
           rubiksCube={this.state.rubiksCube}
