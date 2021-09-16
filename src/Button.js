@@ -1,14 +1,6 @@
 import React, { Component } from "react";
-import "./css/style.css";
 
-class Button extends Component {
-    constructor() {
-      super();
-      this.state = {
-        color: "red"
-      };
-    }
-    
+class Button extends Component {    
     render() {
       return (
         <button
