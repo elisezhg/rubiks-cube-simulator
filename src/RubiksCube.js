@@ -38,11 +38,11 @@ class RubiksCube {
   initState() {
     this.state = [
       Array(9).fill(0xffffff), // White
-      Array(9).fill(0x00ff00), // Green
-      Array(9).fill(0xff0000), // Red
-      Array(9).fill(0x0000ff), // Blue
-      Array(9).fill(0xffa500), // Orange
-      Array(9).fill(0xffff00)  // Yellow
+      Array(9).fill(0xbaff29), // Green
+      Array(9).fill(0xff101f), // Red
+      Array(9).fill(0x0081a7), // Blue
+      Array(9).fill(0xffbc40), // Orange
+      Array(9).fill(0xffff66)  // Yellow
     ];
   }
 

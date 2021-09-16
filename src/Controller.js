@@ -2,6 +2,7 @@ import { Component } from "react";
 import RubiksCubeAnimation from "./RubiksCubeAnimation";
 import RubiksCube from "./RubiksCube";
 import RubiksCubeSolver from "./RubiksCubeSolver";
+import Button from "./Button";
 
 class Controller extends Component {
   constructor(props) {
@@ -33,12 +34,14 @@ class Controller extends Component {
       rubiksCube: new RubiksCube(),
       rubiksCubeSolver: new RubiksCubeSolver(),
       needsUpdate: false,
-      queue: []
+      queue: [],
+      rotationSpeed: 1 / 75
     };
   }
-
+  
   componentDidMount() {
     window.addEventListener('keydown', this.turn);
+    this.generateScramble();
   }
 
   componentWillUnmount() {
@@ -71,17 +74,29 @@ class Controller extends Component {
   }
 
   solve() {
+    this.setState({
+      textDisplay: "Solving...",
+      movesDisplay: ""
+    })
+
     let solution = this.state.rubiksCubeSolver.solve(this.state.rubiksCube);
     
-    this.queueUpMoves(solution);
+    if (solution === "") {
+      this.setState({
+        textDisplay: "Already solved!"
+      })
+    } else {
+      this.setState({
+        textDisplay: "Solution: ",
+        movesDisplay: solution
+      })
+      
+      this.queueUpMoves(solution);  
+    }
   }
 
   scramble() {
-    if (!this.state.scramble) {
-      alert("Please generate a scramble first!");
-    } else {
-      this.queueUpMoves(this.state.scramble);
-    }
+    this.queueUpMoves(this.state.movesDisplay);
   }
 
   queueUpMoves(scramble) {
@@ -90,9 +105,10 @@ class Controller extends Component {
     moves.forEach(m => {
       if (m.slice(1) === "2") {
         this.state.queue.push(m.slice(0, 1));
+        this.state.queue.push(m.slice(0, 1));
+      } else {
+        this.state.queue.push(m);
       }
-
-      this.state.queue.push(m.slice(0, 1));
     });
   }
 
@@ -115,7 +131,8 @@ class Controller extends Component {
     }      
 
     this.setState({
-      scramble: generatedMoves.join(" ")
+      textDisplay: "",
+      movesDisplay: generatedMoves.join(" ")
     })
   }
 
@@ -183,25 +200,9 @@ class Controller extends Component {
 
   render() {
     return (
-      <div>
-        <button type="button" onClick={() => this.turnFrontClockwise()}>F</button>
-        <button type="button" onClick={() => this.turnFrontAntiClockwise()}>F'</button>
-        <button type="button" onClick={() => this.turnUpClockwise()}>U</button>
-        <button type="button" onClick={() => this.turnUpAntiClockwise()}>U'</button>
-        <button type="button" onClick={() => this.turnDownClockwise()}>D</button>
-        <button type="button" onClick={() => this.turnDownAntiClockwise()}>D'</button>
-        <button type="button" onClick={() => this.turnLeftClockwise()}>L</button>
-        <button type="button" onClick={() => this.turnLeftAntiClockwise()}>L'</button>
-        <button type="button" onClick={() => this.turnRightClockwise()}>R</button>
-        <button type="button" onClick={() => this.turnRightAntiClockwise()}>R'</button>
-        <button type="button" onClick={() => this.turnBackClockwise()}>B</button>
-        <button type="button" onClick={() => this.turnBackAntiClockwise()}>B'</button>
-        <button type="button" onClick={() => this.resetRubiksCube()}>Reset</button>
-        <button type="button" onClick={() => this.generateScramble()}>Generate Scramble</button>
-        <button type="button" onClick={() => this.scramble()}>Scramble</button>
-        <button type="button" onClick={() => this.solve()}>Solve</button>
-        <p id="scramble">{this.state.scramble}</p>
+      <div >
         <RubiksCubeAnimation
+          rotationSpeed={this.state.rotationSpeed}
           rubiksCube={this.state.rubiksCube}
           needsUpdate={this.state.needsUpdate}
           queue={this.state.queue}
@@ -219,6 +220,34 @@ class Controller extends Component {
           animateBackAntiClockwise={this.state.animateBackAntiClockwise}
           toggleNeedsUpdate={this.toggleNeedsUpdate}
         />
+
+        <div className="moves-container">
+          <Button text={"F"} function={this.turnFrontClockwise}/>
+          <Button text={"F'"} function={this.turnFrontAntiClockwise}/><br/>
+          <Button text={"B"} function={this.turnBackClockwise}/>
+          <Button text={"B'"} function={this.turnBackAntiClockwise}/><br/>
+          <Button text={"U"} function={this.turnUpClockwise}/>
+          <Button text={"U'"} function={this.turnUpAntiClockwise}/><br/>
+          <Button text={"D"} function={this.turnDownClockwise}/>
+          <Button text={"D'"} function={this.turnDownAntiClockwise}/><br/>
+          <Button text={"L"} function={this.turnLeftClockwise}/>
+          <Button text={"L'"} function={this.turnLeftAntiClockwise}/><br/>
+          <Button text={"R"} function={this.turnRightClockwise}/>
+          <Button text={"R'"} function={this.turnRightAntiClockwise}/><br/>
+        </div>
+
+        <div className="actions-container">
+          <Button text={"Generate Scramble"} function={this.generateScramble}/><br/>
+          <Button text={"Scramble"} function={this.scramble}/><br/>
+          <Button text={"Solve"} function={this.solve}/><br/>
+          <Button text={"Reset"} function={this.resetRubiksCube}/><br/><br/>
+          Speed:
+          <input className="slider" type="range" min="-135" max="-15" defaultValue="-75" step = "15" onChange={(e) => this.setState({rotationSpeed: -1 / e.target.value})}></input>
+        </div>
+
+        <div className="information-display">
+          <p>{this.state.textDisplay}{this.state.movesDisplay}</p>
+        </div>
       </div>
       )
   }
