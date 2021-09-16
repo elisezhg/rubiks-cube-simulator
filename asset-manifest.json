@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/rubiks-cube-simulator/static/css/main.a617e044.chunk.css",
-    "main.js": "/rubiks-cube-simulator/static/js/main.eae8482d.chunk.js",
-    "main.js.map": "/rubiks-cube-simulator/static/js/main.eae8482d.chunk.js.map",
-    "runtime-main.js": "/rubiks-cube-simulator/static/js/runtime-main.4c6a5eb5.js",
-    "runtime-main.js.map": "/rubiks-cube-simulator/static/js/runtime-main.4c6a5eb5.js.map",
-    "static/js/2.e5d182c0.chunk.js": "/rubiks-cube-simulator/static/js/2.e5d182c0.chunk.js",
-    "static/js/2.e5d182c0.chunk.js.map": "/rubiks-cube-simulator/static/js/2.e5d182c0.chunk.js.map",
-    "static/js/3.2408fb2a.chunk.js": "/rubiks-cube-simulator/static/js/3.2408fb2a.chunk.js",
-    "static/js/3.2408fb2a.chunk.js.map": "/rubiks-cube-simulator/static/js/3.2408fb2a.chunk.js.map",
+    "main.css": "/rubiks-cube-simulator/static/css/main.98ecc72e.chunk.css",
+    "main.js": "/rubiks-cube-simulator/static/js/main.f7867916.chunk.js",
+    "main.js.map": "/rubiks-cube-simulator/static/js/main.f7867916.chunk.js.map",
+    "runtime-main.js": "/rubiks-cube-simulator/static/js/runtime-main.9e737215.js",
+    "runtime-main.js.map": "/rubiks-cube-simulator/static/js/runtime-main.9e737215.js.map",
+    "static/js/2.609a329f.chunk.js": "/rubiks-cube-simulator/static/js/2.609a329f.chunk.js",
+    "static/js/2.609a329f.chunk.js.map": "/rubiks-cube-simulator/static/js/2.609a329f.chunk.js.map",
+    "static/js/3.b90ddaad.chunk.js": "/rubiks-cube-simulator/static/js/3.b90ddaad.chunk.js",
+    "static/js/3.b90ddaad.chunk.js.map": "/rubiks-cube-simulator/static/js/3.b90ddaad.chunk.js.map",
     "index.html": "/rubiks-cube-simulator/index.html",
-    "static/css/main.a617e044.chunk.css.map": "/rubiks-cube-simulator/static/css/main.a617e044.chunk.css.map",
-    "static/js/2.e5d182c0.chunk.js.LICENSE.txt": "/rubiks-cube-simulator/static/js/2.e5d182c0.chunk.js.LICENSE.txt"
+    "static/css/main.98ecc72e.chunk.css.map": "/rubiks-cube-simulator/static/css/main.98ecc72e.chunk.css.map",
+    "static/js/2.609a329f.chunk.js.LICENSE.txt": "/rubiks-cube-simulator/static/js/2.609a329f.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.4c6a5eb5.js",
-    "static/js/2.e5d182c0.chunk.js",
-    "static/css/main.a617e044.chunk.css",
-    "static/js/main.eae8482d.chunk.js"
+    "static/js/runtime-main.9e737215.js",
+    "static/js/2.609a329f.chunk.js",
+    "static/css/main.98ecc72e.chunk.css",
+    "static/js/main.f7867916.chunk.js"
   ]
 }
