@@ -14,6 +14,7 @@ class Controller extends Component {
     this.generateScramble = this.generateScramble.bind(this);
     this.scramble = this.scramble.bind(this);
     this.solve = this.solve.bind(this);
+    this.setHoveredMove = this.setHoveredMove.bind(this);
 
     // Movements
     this.turnFrontClockwise = this.turnFrontClockwise.bind(this);
@@ -217,6 +218,12 @@ class Controller extends Component {
     this.state.queue.push("Y2");
   }
 
+  setHoveredMove(move) {
+    this.setState({
+      hoveredMove: move
+    });
+  }
+
   render() {
     return (
       <div >
@@ -225,34 +232,23 @@ class Controller extends Component {
           rubiksCube={this.state.rubiksCube}
           needsUpdate={this.state.needsUpdate}
           queue={this.state.queue}
-          animateFrontClockwise={this.state.animateFrontClockwise}
-          animateFrontAntiClockwise={this.state.animateFrontAntiClockwise}
-          animateUpClockwise={this.state.animateUpClockwise}
-          animateUpAntiClockwise={this.state.animateUpAntiClockwise}
-          animateDownClockwise={this.state.animateDownClockwise}
-          animateDownAntiClockwise={this.state.animateDownAntiClockwise}
-          animateLeftClockwise={this.state.animateLeftClockwise}
-          animateLeftAntiClockwise={this.state.animateLeftAntiClockwise}
-          animateRightClockwise={this.state.animateRightClockwise}
-          animateRightAntiClockwise={this.state.animateRightAntiClockwise}
-          animateBackClockwise={this.state.animateBackClockwise}
-          animateBackAntiClockwise={this.state.animateBackAntiClockwise}
+          hoveredMove={this.state.hoveredMove}
           toggleNeedsUpdate={this.toggleNeedsUpdate}
         />
 
         <div className="moves-container">
-          <Button text={"F"} function={this.turnFrontClockwise}/>
-          <Button text={"F'"} function={this.turnFrontAntiClockwise}/><br/>
-          <Button text={"B"} function={this.turnBackClockwise}/>
-          <Button text={"B'"} function={this.turnBackAntiClockwise}/><br/>
-          <Button text={"U"} function={this.turnUpClockwise}/>
-          <Button text={"U'"} function={this.turnUpAntiClockwise}/><br/>
-          <Button text={"D"} function={this.turnDownClockwise}/>
-          <Button text={"D'"} function={this.turnDownAntiClockwise}/><br/>
-          <Button text={"L"} function={this.turnLeftClockwise}/>
-          <Button text={"L'"} function={this.turnLeftAntiClockwise}/><br/>
-          <Button text={"R"} function={this.turnRightClockwise}/>
-          <Button text={"R'"} function={this.turnRightAntiClockwise}/><br/>
+          <Button text={"F"} function={this.turnFrontClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button text={"F'"} function={this.turnFrontAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button text={"B"} function={this.turnBackClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button text={"B'"} function={this.turnBackAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button text={"U"} function={this.turnUpClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button text={"U'"} function={this.turnUpAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button text={"D"} function={this.turnDownClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button text={"D'"} function={this.turnDownAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button text={"L"} function={this.turnLeftClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button text={"L'"} function={this.turnLeftAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button text={"R"} function={this.turnRightClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button text={"R'"} function={this.turnRightAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
           <Button text={"X2"} function={this.turnXAxis}/>
           <Button text={"Y2"} function={this.turnYAxis}/><br/>
         </div>
