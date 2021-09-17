@@ -10,6 +10,7 @@ class RubiksCubeAnimation extends Component {
     this.stop = this.stop.bind(this);
     this.animate = this.animate.bind(this);
     this.updateColorMiniCubes = this.updateColorMiniCubes.bind(this);
+    this.resizeCanvasToDisplaySize = this.resizeCanvasToDisplaySize.bind(this);
   }
 
   componentDidMount() {
@@ -17,7 +18,10 @@ class RubiksCubeAnimation extends Component {
     const height = window.innerHeight;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x16181a);
+    scene.background = new THREE.Color(0xfffdd0);
+    
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(width, height, false);
 
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -25,8 +29,7 @@ class RubiksCubeAnimation extends Component {
       0.1,
       1000
     );
-
-    const renderer = new THREE.WebGLRenderer({antialias: true});
+    camera.position.set(5, 3, 5);
 
     let geometry;
     const material = new THREE.MeshBasicMaterial({vertexColors: true});
@@ -89,25 +92,25 @@ class RubiksCubeAnimation extends Component {
       }
     }
 
-    camera.position.set(-5, 3, 5);
-    renderer.setSize(width, height);
-
     // Ortbit Controls
 		const orbitControls = new OrbitControls(camera, renderer.domElement);
-    orbitControls.rotateSpeed = 0.4;
+    orbitControls.enablePan = false;
 
     this.scene = scene;
     this.camera = camera;
     this.renderer = renderer;
     this.material = material;
+    this.orbitControls = orbitControls;
+
     this.cubes = cubes;
     this.cubeBorders = cubeBorders;
-    this.orbitControls = orbitControls;
 
     this.mount.appendChild(this.renderer.domElement);
     this.start();
 
     this.queue = [];
+
+    window.addEventListener("resize", this.resizeCanvasToDisplaySize, false);
   }
 
   componentWillUnmount() {
@@ -178,7 +181,7 @@ class RubiksCubeAnimation extends Component {
     switch (this.currentMove) {
       case "U":
         if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
-          this.currentGroup.rotation.y -= Math.PI / 90;
+          this.currentGroup.rotation.y -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnUpClockwise();
           this.initMoveAnimation();
@@ -187,7 +190,7 @@ class RubiksCubeAnimation extends Component {
 
       case "U'":
         if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
-          this.currentGroup.rotation.y += Math.PI / 90;
+          this.currentGroup.rotation.y += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnUpAntiClockwise();
           this.initMoveAnimation();
@@ -196,7 +199,7 @@ class RubiksCubeAnimation extends Component {
       
       case "D":
         if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
-          this.currentGroup.rotation.y += Math.PI / 90;
+          this.currentGroup.rotation.y += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnDownClockwise();
           this.initMoveAnimation();
@@ -205,17 +208,16 @@ class RubiksCubeAnimation extends Component {
       
       case "D'":
         if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
-          this.currentGroup.rotation.y -= Math.PI / 90;
+          this.currentGroup.rotation.y -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnDownAntiClockwise();
-          this.currentGroup.rotation.y = 0;
           this.initMoveAnimation();
         }
         break;
       
       case "F":
         if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
-          this.currentGroup.rotation.z -= Math.PI / 90;
+          this.currentGroup.rotation.z -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnFrontClockwise();
           this.initMoveAnimation();
@@ -224,7 +226,7 @@ class RubiksCubeAnimation extends Component {
 
       case "F'":
         if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
-          this.currentGroup.rotation.z += Math.PI / 90;
+          this.currentGroup.rotation.z += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnFrontAntiClockwise();
           this.initMoveAnimation();
@@ -233,7 +235,7 @@ class RubiksCubeAnimation extends Component {
 
       case "B":
         if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
-          this.currentGroup.rotation.z += Math.PI / 90;
+          this.currentGroup.rotation.z += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnBackClockwise();
           this.initMoveAnimation();
@@ -242,7 +244,7 @@ class RubiksCubeAnimation extends Component {
 
       case "B'":
         if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
-          this.currentGroup.rotation.z -= Math.PI / 90;
+          this.currentGroup.rotation.z -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnBackAntiClockwise();
           this.initMoveAnimation();
@@ -251,7 +253,7 @@ class RubiksCubeAnimation extends Component {
 
       case "L":
         if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
-          this.currentGroup.rotation.x += Math.PI / 90;
+          this.currentGroup.rotation.x += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnLeftClockwise();
           this.initMoveAnimation();
@@ -260,7 +262,7 @@ class RubiksCubeAnimation extends Component {
 
       case "L'":
         if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
-          this.currentGroup.rotation.x -= Math.PI / 90;
+          this.currentGroup.rotation.x -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnLeftAntiClockwise();
           this.initMoveAnimation();
@@ -269,7 +271,7 @@ class RubiksCubeAnimation extends Component {
 
       case "R":
         if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
-          this.currentGroup.rotation.x -= Math.PI / 90;
+          this.currentGroup.rotation.x -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnRightClockwise();
           this.initMoveAnimation();
@@ -278,7 +280,7 @@ class RubiksCubeAnimation extends Component {
 
       case "R'":
         if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
-          this.currentGroup.rotation.x += Math.PI / 90;
+          this.currentGroup.rotation.x += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnRightAntiClockwise();
           this.initMoveAnimation();
@@ -300,10 +302,22 @@ class RubiksCubeAnimation extends Component {
   render() {
     return (
       <div
-        style={{ width: '400px', height: '400px' }}
         ref={(mount) => { this.mount = mount }}
       />
       )
+  }
+
+  // From Stackoverflow: https://stackoverflow.com/questions/45041158/resizing-canvas-webgl-to-fit-screen-width-and-heigh
+  resizeCanvasToDisplaySize(force) {
+    const canvas = this.renderer.domElement;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+  
+    if (force || canvas.width !== width || canvas.height !== height) {
+      this.renderer.setSize(width, height, false);
+      this.camera.aspect = width / height;
+      this.camera.updateProjectionMatrix();
+    }
   }
 
   updateColorMiniCubes() {
@@ -349,7 +363,7 @@ class RubiksCubeAnimation extends Component {
 
   initMoveAnimation() {
     this.currentMove = null;
-    this.currentGroup.rotation.set(0, 0, 0);
+    if (this.currentGroup) this.currentGroup.rotation.set(0, 0, 0);
     this.updateColorMiniCubes();
   }
 }
