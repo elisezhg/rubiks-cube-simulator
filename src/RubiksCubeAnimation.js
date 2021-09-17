@@ -170,6 +170,13 @@ class RubiksCubeAnimation extends Component {
           this.createGroup([2, 5, 8, 11, 14, 17, 20, 23, 26]);
           break;
         
+        case "X2":
+        case "Y2":
+          let indices = [];
+          for (var i = 0; i < this.cubes.length; i++) indices.push(i);
+          this.createGroup(indices);
+          break;
+        
         default:
           break;
       }
@@ -180,7 +187,7 @@ class RubiksCubeAnimation extends Component {
     // Animate current move
     switch (this.currentMove) {
       case "U":
-        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI / 2) {
           this.currentGroup.rotation.y -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnUpClockwise();
@@ -189,7 +196,7 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "U'":
-        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI / 2) {
           this.currentGroup.rotation.y += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnUpAntiClockwise();
@@ -198,7 +205,7 @@ class RubiksCubeAnimation extends Component {
         break;
       
       case "D":
-        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI / 2) {
           this.currentGroup.rotation.y += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnDownClockwise();
@@ -207,7 +214,7 @@ class RubiksCubeAnimation extends Component {
         break;
       
       case "D'":
-        if (Math.abs(this.currentGroup.rotation.y) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI / 2) {
           this.currentGroup.rotation.y -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnDownAntiClockwise();
@@ -216,7 +223,7 @@ class RubiksCubeAnimation extends Component {
         break;
       
       case "F":
-        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI / 2) {
           this.currentGroup.rotation.z -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnFrontClockwise();
@@ -225,7 +232,7 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "F'":
-        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI / 2) {
           this.currentGroup.rotation.z += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnFrontAntiClockwise();
@@ -234,7 +241,7 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "B":
-        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI / 2) {
           this.currentGroup.rotation.z += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnBackClockwise();
@@ -243,7 +250,7 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "B'":
-        if (Math.abs(this.currentGroup.rotation.z) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI / 2) {
           this.currentGroup.rotation.z -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnBackAntiClockwise();
@@ -252,7 +259,7 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "L":
-        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI / 2) {
           this.currentGroup.rotation.x += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnLeftClockwise();
@@ -261,7 +268,7 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "L'":
-        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI / 2) {
           this.currentGroup.rotation.x -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnLeftAntiClockwise();
@@ -270,7 +277,7 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "R":
-        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI / 2) {
           this.currentGroup.rotation.x -= Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnRightClockwise();
@@ -279,10 +286,28 @@ class RubiksCubeAnimation extends Component {
         break;
 
       case "R'":
-        if (Math.abs(this.currentGroup.rotation.x) < Math.PI /2) {
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI / 2) {
           this.currentGroup.rotation.x += Math.PI * this.props.rotationSpeed;
         } else {
           this.props.rubiksCube.turnRightAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "X2":
+        if (Math.abs(this.currentGroup.rotation.z) < Math.PI) {
+          this.currentGroup.rotation.z -= Math.PI * this.props.rotationSpeed;
+        } else {
+          this.props.rubiksCube.turnXAxis();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "Y2":
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI) {
+          this.currentGroup.rotation.y -= Math.PI * this.props.rotationSpeed;
+        } else {
+          this.props.rubiksCube.turnYAxis();
           this.initMoveAnimation();
         }
         break;

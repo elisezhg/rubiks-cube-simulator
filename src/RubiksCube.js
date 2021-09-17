@@ -374,6 +374,29 @@ class RubiksCube {
     this.state[face][7] = this.state[face][3];
     this.state[face][3] = tmpFaceEdge;
   }
+
+  turnXAxis() {
+    this.state = this.state.map(face => {
+      return face.reverse();
+    });
+
+    this.swapFaces(0, 5);
+    this.swapFaces(2, 4);
+  }
+
+  turnYAxis() {
+    this.state[0] = this.state[0].reverse();
+    this.state[5] = this.state[5].reverse();
+
+    this.swapFaces(1, 3);
+    this.swapFaces(2, 4);
+  }
+
+  swapFaces(face1, face2) {
+    let tmp = this.state[face1];
+    this.state[face1] = this.state[face2];
+    this.state[face2] = tmp;
+  }
 }
 
 export default RubiksCube;

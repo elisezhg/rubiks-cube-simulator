@@ -3,6 +3,7 @@ import RubiksCubeAnimation from "./RubiksCubeAnimation";
 import RubiksCube from "./RubiksCube";
 import RubiksCubeSolver from "./RubiksCubeSolver";
 import Button from "./Button";
+import "./css/style.css";
 
 class Controller extends Component {
   constructor(props) {
@@ -27,6 +28,8 @@ class Controller extends Component {
     this.turnRightAntiClockwise = this.turnRightAntiClockwise.bind(this);
     this.turnBackClockwise = this.turnBackClockwise.bind(this);
     this.turnBackAntiClockwise = this.turnBackAntiClockwise.bind(this);
+    this.turnXAxis = this.turnXAxis.bind(this);
+    this.turnYAxis = this.turnYAxis.bind(this);
 
     this.turn = this.turn.bind(this);
 
@@ -68,6 +71,14 @@ class Controller extends Component {
       case 68:
         this.turnDownClockwise();
         break;
+      case 96:
+        this.state.rubiksCube.upsideDown();
+        this.toggleNeedsUpdate();
+        break;
+      case 97:
+        this.state.rubiksCube.moveCubeLeft();
+        this.toggleNeedsUpdate();
+        break;
       default:
         console.log("not recognized");
     }
@@ -80,7 +91,7 @@ class Controller extends Component {
     })
 
     let solution = this.state.rubiksCubeSolver.solve(this.state.rubiksCube);
-    
+
     if (solution === "") {
       this.setState({
         textDisplay: "Already solved!"
@@ -198,6 +209,14 @@ class Controller extends Component {
     this.state.queue.push("B'");
   }
 
+  turnXAxis() {
+    this.state.queue.push("X2");
+  }
+
+  turnYAxis() {
+    this.state.queue.push("Y2");
+  }
+
   render() {
     return (
       <div >
@@ -234,6 +253,8 @@ class Controller extends Component {
           <Button text={"L'"} function={this.turnLeftAntiClockwise}/><br/>
           <Button text={"R"} function={this.turnRightClockwise}/>
           <Button text={"R'"} function={this.turnRightAntiClockwise}/><br/>
+          <Button text={"X2"} function={this.turnXAxis}/>
+          <Button text={"Y2"} function={this.turnYAxis}/><br/>
         </div>
 
         <div className="actions-container">
