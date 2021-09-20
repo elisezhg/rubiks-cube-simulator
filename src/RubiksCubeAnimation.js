@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import FaceMovement from './FaceMovement';
 
 class RubiksCubeAnimation extends Component {
   constructor(props) {
@@ -11,6 +12,10 @@ class RubiksCubeAnimation extends Component {
     this.animate = this.animate.bind(this);
     this.updateColorMiniCubes = this.updateColorMiniCubes.bind(this);
     this.resizeCanvasToDisplaySize = this.resizeCanvasToDisplaySize.bind(this);
+    this.pointerDown = this.pointerDown.bind(this);
+    this.pointerUp = this.pointerUp.bind(this);
+    this.pointerMove = this.pointerMove.bind(this);
+    this.getIndexMiniCube = this.getIndexMiniCube.bind(this);
   }
 
   componentDidMount() {
@@ -30,6 +35,9 @@ class RubiksCubeAnimation extends Component {
       1000
     );
     camera.position.set(5, 3, 5);
+    camera.lookAt(0, 0, 0);
+    this.cameraTarget = new THREE.Vector3(0, 3, 7);
+
 
     let geometry;
     const material = new THREE.MeshBasicMaterial({vertexColors: true});
@@ -104,6 +112,7 @@ class RubiksCubeAnimation extends Component {
 
     // Ortbit Controls
 		const orbitControls = new OrbitControls(camera, renderer.domElement);
+    orbitControls.rotateSpeed = 0.4;
     orbitControls.enablePan = false;
 
     this.scene = scene;
@@ -120,9 +129,200 @@ class RubiksCubeAnimation extends Component {
     this.mount.appendChild(this.renderer.domElement);
     this.start();
 
-    this.queue = [];
-
     window.addEventListener("resize", this.resizeCanvasToDisplaySize, false);
+
+    this.getFrontFace();
+
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+    this.draggable = null;
+    this.directionVector = new THREE.Vector2();
+    this.FM = new FaceMovement();
+  
+    window.addEventListener("pointerdown", this.pointerDown, false);
+    window.addEventListener("pointerup", this.pointerUp, false);
+    window.addEventListener("pointermove", this.pointerMove, false);
+
+  }
+
+  getIndexMiniCube(miniCube) {
+    return this.cubes.indexOf(miniCube);
+  }
+
+  getFaceMiniCube(normal) {
+    if (normal.x === 1) {
+      return 2;
+    } else if (normal.x === -1) {
+      return 4;
+    } else if (normal.y === 1) {
+      return 0;
+    } else if (normal.y === -1) {
+      return 5;
+    } else if (normal.z === 1) {
+      return 1;
+    } else {
+      return 3;
+    }
+  }
+
+  pointerDown(event) {
+    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    let intersects = this.raycaster.intersectObjects(this.cubes);
+
+    // If the cube is selected and there's no current move
+    if (intersects.length > 0) {
+
+      // Disable Orbit Controls
+      this.orbitControls.enabled = false;
+      this.orbitControls.saveState();
+      
+      if (!this.currentMove) {
+        let idxMiniCube = this.getIndexMiniCube(intersects[0].object);
+        let faceMiniCube = this.getFaceMiniCube(intersects[0].face.normal);
+        this.possibleMoves = this.FM.getPossibleMoves(idxMiniCube, faceMiniCube);
+  
+        this.selectedFace = faceMiniCube;
+        this.draggable = true;
+
+        this.oldX = this.mouse.x;
+        this.oldY = this.mouse.y;
+      }
+    }
+  }
+  
+  pointerUp() {
+    if (this.draggable) {
+      
+      // Enable Orbit Controls
+      this.orbitControls.reset();
+      this.orbitControls.enabled = true;
+      
+      // Set the current move to trigger the animation
+      this.currentMove = this.direction;
+      
+      // Reset
+      this.possibleMoves = null;
+      this.direction = null;
+      this.draggable = null;
+    }
+  }
+
+  getFrontFace() {
+    const idxFaces = [16, 22, 14, 4, 12, 10];
+
+    let frontFace;
+    let distanceMin = Infinity;
+
+    idxFaces.forEach(idx => {
+      const distance = this.camera.position.distanceTo(this.cubes[idx].position);
+
+      if (distance < distanceMin) {
+        distanceMin = distance;
+        frontFace = idx;
+      }
+    })
+
+    return idxFaces.indexOf(frontFace);
+  }
+
+  pointerMove(event) {
+    const currentFrontFace = this.getFrontFace();
+
+    if (currentFrontFace !== 1 && !this.currentMove && !this.animating && this.props.queue.length === 0) {
+      if (currentFrontFace === 4) {
+        this.props.rubiksCube.turnYAxisAntiClockwise();
+        this.camera.position.x *= -1;
+
+      } else if (currentFrontFace === 0) {
+        this.animating = true;
+        this.currentMove = "X'";
+        this.createGroup(this.FM.getIndices(this.currentMove));
+
+      } else if (currentFrontFace === 5) {
+        this.animating = true;
+        this.currentMove = "X";
+        this.createGroup(this.FM.getIndices(this.currentMove));
+
+      } else if (currentFrontFace === 3) {
+        this.props.rubiksCube.turnYAxis();
+        this.camera.position.x *= -1;
+        this.camera.position.z *= -1;
+      }
+      
+      this.orbitControls.update();
+      this.updateColorMiniCubes();      
+    }
+
+    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    
+    this.diffX = this.mouse.x - this.oldX;
+    this.diffY = this.mouse.y - this.oldY;
+
+    if (this.draggable && this.props.queue.length === 0) {
+
+      // Determines the direction vector
+      if (!this.currentGroup) {
+        this.directionVector.set(
+          Math.abs(this.diffX) > Math.abs(this.diffY)? (this.diffX > 0? 1 : -1) : 0,
+          Math.abs(this.diffY) > Math.abs(this.diffX)? (this.diffY > 0? 1 : -1) : 0
+        );
+      } else {
+        this.directionVector.set(
+          this.diffX > 0? 1 : -1,
+          this.diffY > 0? 1 : -1
+        );
+      }
+      
+      this.possibleDirections = this.FM.getPossibleMovesFromDirection(this.directionVector, this.selectedFace);
+
+      // with the direction, determine the possible move (only one possible)
+      this.direction = this.possibleDirections.filter(value => this.possibleMoves.includes(value))[0];
+      if (this.direction) this.possibleMoves = [this.direction.slice(0, 1), this.direction.slice(0, 1) + "'"]; // Limit future possible moves
+      
+      // if the current group is not created yet:
+      if (!this.currentGroup && this.direction) {
+        this.createGroup(this.FM.getIndices(this.direction));
+        this.draggable = this.currentGroup;
+
+      } else if (this.currentGroup) {
+        // rotation of the group to the direction
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI / 2 &&
+            Math.abs(this.currentGroup.rotation.y) < Math.PI / 2 &&
+            Math.abs(this.currentGroup.rotation.z) < Math.PI / 2) {
+          switch(this.direction) {
+            case "L":
+            case "L'":
+            case "R":
+            case "R'":
+              this.draggable.rotation.x = -this.mouse.y;
+              break;
+            case "U":
+            case "U'":
+            case "D":
+            case "D'":    
+            this.draggable.rotation.y = this.mouse.x;
+              break;
+            case "F":
+            case "F'":
+            case "B":
+            case "B'":    
+              this.draggable.rotation.z =  Math.abs(this.mouse.x) > Math.abs(this.mouse.y)? this.mouse.x : this.mouse.y;
+                break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+
+    this.oldX = this.mouse.x;
+    this.oldY = this.mouse.y;
   }
 
   componentWillUnmount() {
@@ -141,13 +341,20 @@ class RubiksCubeAnimation extends Component {
   }
 
   animate() {
+    if (this.animating) {
+      this.camera.lookAt(0, 0, 0);
+      this.camera.position.lerp(this.cameraTarget, 10 * this.props.rotationSpeed);
+
+      if (this.camera.position.distanceTo(this.cameraTarget) < 0.05) this.animating = false;
+    }
+
     if (this.props.needsUpdate) {
       this.initMoveAnimation();
       this.props.toggleNeedsUpdate();
     }
 
     // If a move button is hovered, we display the arrow
-    if (this.props.hoveredMove && !this.displayedArrow) {
+    if (this.props.hoveredMove && !this.displayedArrow && !this.draggable) {
       this.showArrow();
     // otherwise, we remove the arrow
     } else if (!this.props.hoveredMove && this.displayedArrow) {
@@ -192,47 +399,7 @@ class RubiksCubeAnimation extends Component {
       let currentMove = this.props.queue.shift();
       console.log(`animating ${currentMove}...`);
 
-      switch (currentMove) {
-        case "U":
-        case "U'":
-          this.createGroup([6, 7, 8, 15, 16, 17, 24, 25, 26]);
-          break;
-
-        case "D":
-        case "D'":
-          this.createGroup([0, 1, 2, 9, 10, 11, 18, 19, 20]);
-          break;
-        
-        case "F":
-        case "F'":
-          this.createGroup([18, 19, 20, 21, 22, 23, 24, 25, 26]);
-          break;
-        
-        case "B":
-        case "B'":
-          this.createGroup([0, 1, 2, 3, 4, 5, 6, 7, 8]);
-          break;
-        
-        case "L":
-        case "L'":
-          this.createGroup([0, 3, 6, 9, 12, 15, 18, 21, 24]);
-          break;
-        
-        case "R":
-        case "R'":
-          this.createGroup([2, 5, 8, 11, 14, 17, 20, 23, 26]);
-          break;
-        
-        case "X2":
-        case "Y2":
-          let indices = [];
-          for (var i = 0; i < this.cubes.length; i++) indices.push(i);
-          this.createGroup(indices);
-          break;
-        
-        default:
-          break;
-      }
+      this.createGroup(this.FM.getIndices(currentMove));
 
       this.currentMove = currentMove;
     }
@@ -378,6 +545,41 @@ class RubiksCubeAnimation extends Component {
         }
         break;
 
+      case "Y":
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI / 2) {
+          this.currentGroup.rotation.y -= Math.PI * this.props.rotationSpeed;
+        } else {
+          this.props.rubiksCube.turnYAxisClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "Y'":
+        if (Math.abs(this.currentGroup.rotation.y) < Math.PI / 2) {
+          this.currentGroup.rotation.y += Math.PI * this.props.rotationSpeed;
+        } else {
+          this.props.rubiksCube.turnYAxisAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+      
+      case "X":
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI / 2) {
+          this.currentGroup.rotation.x -= Math.PI * this.props.rotationSpeed;
+        } else {
+          this.props.rubiksCube.turnXAxisClockwise();
+          this.initMoveAnimation();
+        }
+        break;
+
+      case "X'":
+        if (Math.abs(this.currentGroup.rotation.x) < Math.PI / 2) {
+          this.currentGroup.rotation.x += Math.PI * this.props.rotationSpeed;
+        } else {
+          this.props.rubiksCube.turnXAxisAntiClockwise();
+          this.initMoveAnimation();
+        }
+        break;
       default:
         break;
     }
@@ -427,6 +629,7 @@ class RubiksCubeAnimation extends Component {
   initMoveAnimation() {
     this.currentMove = null;
     if (this.currentGroup) this.currentGroup.rotation.set(0, 0, 0);
+    this.currentGroup = null;
     this.updateColorMiniCubes();
   }
 

@@ -31,6 +31,10 @@ class Controller extends Component {
     this.turnBackAntiClockwise = this.turnBackAntiClockwise.bind(this);
     this.turnXAxis = this.turnXAxis.bind(this);
     this.turnYAxis = this.turnYAxis.bind(this);
+    this.turnYAxisClockwise = this.turnYAxisClockwise.bind(this);
+    this.turnYAxisAntiClockwise = this.turnYAxisAntiClockwise.bind(this);
+    this.turnXAxisClockwise = this.turnXAxisClockwise.bind(this);
+    this.turnXAxisAntiClockwise = this.turnXAxisAntiClockwise.bind(this);
 
     this.turn = this.turn.bind(this);
 
@@ -218,6 +222,22 @@ class Controller extends Component {
     this.state.queue.push("Y2");
   }
 
+  turnYAxisClockwise() {
+    this.state.queue.push("Y");
+  }
+
+  turnYAxisAntiClockwise() {
+    this.state.queue.push("Y'");
+  }
+
+  turnXAxisClockwise() {
+    this.state.queue.push("X");
+  }
+
+  turnXAxisAntiClockwise() {
+    this.state.queue.push("X'");
+  }
+
   setHoveredMove(move) {
     this.setState({
       hoveredMove: move
@@ -249,6 +269,10 @@ class Controller extends Component {
           <Button text={"L'"} function={this.turnLeftAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
           <Button text={"R"} function={this.turnRightClockwise} setHoveredMove={this.setHoveredMove}/>
           <Button text={"R'"} function={this.turnRightAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button text={"Y"} function={this.turnYAxisClockwise}/>
+          <Button text={"Y'"} function={this.turnYAxisAntiClockwise}/><br/>
+          <Button text={"X"} function={this.turnXAxisClockwise}/>
+          <Button text={"X'"} function={this.turnXAxisAntiClockwise}/><br/>
           <Button text={"X2"} function={this.turnXAxis}/>
           <Button text={"Y2"} function={this.turnYAxis}/><br/>
         </div>

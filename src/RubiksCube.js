@@ -392,6 +392,50 @@ class RubiksCube {
     this.swapFaces(2, 4);
   }
 
+  turnYAxisClockwise() {
+    let tmp = this.state[1];
+    this.state[1] = this.state[2];
+    this.state[2] = this.state[3];
+    this.state[3] = this.state[4];
+    this.state[4] = tmp;
+
+    this.turnFaceClockwise(0);
+    this.turnFaceAntiClockwise(5);
+  }
+
+  turnYAxisAntiClockwise() {
+    let tmp = this.state[4];
+    this.state[4] = this.state[3];
+    this.state[3] = this.state[2];
+    this.state[2] = this.state[1];
+    this.state[1] = tmp;
+
+    this.turnFaceAntiClockwise(0);
+    this.turnFaceClockwise(5);
+  }
+
+  turnXAxisClockwise() {
+    let tmp = this.state[0];
+    this.state[0] = this.state[1];
+    this.state[1] = this.state[5];
+    this.state[5] = this.state[3].reverse();
+    this.state[3] = tmp.reverse();
+
+    this.turnFaceClockwise(2);
+    this.turnFaceAntiClockwise(4);
+  }
+
+  turnXAxisAntiClockwise() {
+    let tmp = this.state[0];
+    this.state[0] = this.state[3].reverse();
+    this.state[3] = this.state[5].reverse();
+    this.state[5] = this.state[1];
+    this.state[1] = tmp;
+
+    this.turnFaceAntiClockwise(2);
+    this.turnFaceClockwise(4);
+  }
+
   swapFaces(face1, face2) {
     let tmp = this.state[face1];
     this.state[face1] = this.state[face2];
