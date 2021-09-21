@@ -142,7 +142,6 @@ class RubiksCubeAnimation extends Component {
     window.addEventListener("pointerdown", this.pointerDown, false);
     window.addEventListener("pointerup", this.pointerUp, false);
     window.addEventListener("pointermove", this.pointerMove, false);
-
   }
 
   getIndexMiniCube(miniCube) {
@@ -197,9 +196,13 @@ class RubiksCubeAnimation extends Component {
     if (this.draggable) {
       
       // Enable Orbit Controls
-      this.orbitControls.reset();
-      this.orbitControls.enabled = true;
-      
+      // this.orbitControls.reset();
+      // this.orbitControls.enabled = true;
+
+      this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
+      this.orbitControls.rotateSpeed = 0.4;
+      this.orbitControls.enablePan = false;
+
       // Set the current move to trigger the animation
       this.currentMove = this.direction;
       
@@ -239,11 +242,15 @@ class RubiksCubeAnimation extends Component {
       } else if (currentFrontFace === 0) {
         this.animating = true;
         this.currentMove = "X'";
+        this.cameraTarget.x = this.camera.position.x;
+        this.cameraTarget.z = this.camera.position.z < 4? this.camera.position.z + 3 : 7;
         this.createGroup(this.FM.getIndices(this.currentMove));
 
       } else if (currentFrontFace === 5) {
         this.animating = true;
         this.currentMove = "X";
+        this.cameraTarget.x = this.camera.position.x;
+        this.cameraTarget.z = this.camera.position.z < 4? this.camera.position.z + 3 : 7;
         this.createGroup(this.FM.getIndices(this.currentMove));
 
       } else if (currentFrontFace === 3) {

@@ -17,8 +17,9 @@ body {
   position: absolute;
   top: 35%;
   left: 5%;
+  display: flex;
+  flex-direction: column;
 }
-
 
 button {
   background-color: #fcdebe;
@@ -77,4 +78,32 @@ button:hover {
   height: 25px;
   background: #fad9b6;
   cursor: pointer;
+}
+
+/* Screensize adjustments */
+@media (max-width: 900px) {
+  .moves-container {
+    display: none;
+  }
+
+  .actions-container {
+    flex-direction: row;
+    bottom: 0%;
+    top: 80%;
+    flex-wrap: wrap;
+    width: 440px;
+    margin: auto;
+    left: 0;
+    right: 0;
+  }
+
+  button:focus:active {
+    background-color: #ffb65f;
+    color: black;
+  }
+
+  button:hover {
+    background-color: #fcdebe;
+    color: #3a3335;
+  }
 }

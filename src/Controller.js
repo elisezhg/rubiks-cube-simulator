@@ -3,6 +3,7 @@ import RubiksCubeAnimation from "./RubiksCubeAnimation";
 import RubiksCube from "./RubiksCube";
 import RubiksCubeSolver from "./RubiksCubeSolver";
 import Button from "./Button";
+import { isMobile } from 'react-device-detect';
 import "./css/style.css";
 
 class Controller extends Component {
@@ -247,7 +248,7 @@ class Controller extends Component {
   render() {
     return (
       <div >
-        <RubiksCubeAnimation
+        <RubiksCubeAnimation  isMobile={isMobile} 
           rotationSpeed={this.state.rotationSpeed}
           rubiksCube={this.state.rubiksCube}
           needsUpdate={this.state.needsUpdate}
@@ -257,31 +258,31 @@ class Controller extends Component {
         />
 
         <div className="moves-container">
-          <Button text={"F"} function={this.turnFrontClockwise} setHoveredMove={this.setHoveredMove}/>
-          <Button text={"F'"} function={this.turnFrontAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
-          <Button text={"B"} function={this.turnBackClockwise} setHoveredMove={this.setHoveredMove}/>
-          <Button text={"B'"} function={this.turnBackAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
-          <Button text={"U"} function={this.turnUpClockwise} setHoveredMove={this.setHoveredMove}/>
-          <Button text={"U'"} function={this.turnUpAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
-          <Button text={"D"} function={this.turnDownClockwise} setHoveredMove={this.setHoveredMove}/>
-          <Button text={"D'"} function={this.turnDownAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
-          <Button text={"L"} function={this.turnLeftClockwise} setHoveredMove={this.setHoveredMove}/>
-          <Button text={"L'"} function={this.turnLeftAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
-          <Button text={"R"} function={this.turnRightClockwise} setHoveredMove={this.setHoveredMove}/>
-          <Button text={"R'"} function={this.turnRightAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
-          <Button text={"Y"} function={this.turnYAxisClockwise}/>
-          <Button text={"Y'"} function={this.turnYAxisAntiClockwise}/><br/>
-          <Button text={"X"} function={this.turnXAxisClockwise}/>
-          <Button text={"X'"} function={this.turnXAxisAntiClockwise}/><br/>
-          <Button text={"X2"} function={this.turnXAxis}/>
-          <Button text={"Y2"} function={this.turnYAxis}/><br/>
+          <Button isMobile={isMobile} text={"F"} function={this.turnFrontClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button isMobile={isMobile} text={"F'"} function={this.turnFrontAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button isMobile={isMobile} text={"B"} function={this.turnBackClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button isMobile={isMobile} text={"B'"} function={this.turnBackAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button isMobile={isMobile} text={"U"} function={this.turnUpClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button isMobile={isMobile} text={"U'"} function={this.turnUpAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button isMobile={isMobile} text={"D"} function={this.turnDownClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button isMobile={isMobile} text={"D'"} function={this.turnDownAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button isMobile={isMobile} text={"L"} function={this.turnLeftClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button isMobile={isMobile} text={"L'"} function={this.turnLeftAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button isMobile={isMobile} text={"R"} function={this.turnRightClockwise} setHoveredMove={this.setHoveredMove}/>
+          <Button isMobile={isMobile} text={"R'"} function={this.turnRightAntiClockwise} setHoveredMove={this.setHoveredMove}/><br/>
+          <Button isMobile={isMobile} text={"Y"} function={this.turnYAxisClockwise}/>
+          <Button isMobile={isMobile} text={"Y'"} function={this.turnYAxisAntiClockwise}/><br/>
+          <Button isMobile={isMobile} text={"X"} function={this.turnXAxisClockwise}/>
+          <Button isMobile={isMobile} text={"X'"} function={this.turnXAxisAntiClockwise}/><br/>
+          <Button isMobile={isMobile} text={"X2"} function={this.turnXAxis}/>
+          <Button isMobile={isMobile} text={"Y2"} function={this.turnYAxis}/><br/>
         </div>
 
         <div className="actions-container">
-          <Button text={"Generate Scramble"} function={this.generateScramble}/><br/>
-          <Button text={"Scramble"} function={this.scramble}/><br/>
-          <Button text={"Solve"} function={this.solve}/><br/>
-          <Button text={"Reset"} function={this.resetRubiksCube}/><br/><br/>
+          <Button isMobile={isMobile} text={"Generate Scramble"} function={this.generateScramble}/>
+          <Button isMobile={isMobile} text={"Scramble"} function={this.scramble}/>
+          <Button isMobile={isMobile} text={"Solve"} function={this.solve}/>
+          <Button isMobile={isMobile} text={"Reset"} function={this.resetRubiksCube}/>
           Speed:
           <input className="slider" type="range" min="-135" max="-15" defaultValue="-75" step = "15" onChange={(e) => this.setState({rotationSpeed: -1 / e.target.value})}></input>
         </div>
