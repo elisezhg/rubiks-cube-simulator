@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/rubiks-cube-simulator/static/css/main.98ecc72e.chunk.css",
-    "main.js": "/rubiks-cube-simulator/static/js/main.eb1d29d6.chunk.js",
-    "main.js.map": "/rubiks-cube-simulator/static/js/main.eb1d29d6.chunk.js.map",
+    "main.css": "/rubiks-cube-simulator/static/css/main.82ac8c84.chunk.css",
+    "main.js": "/rubiks-cube-simulator/static/js/main.2baaf994.chunk.js",
+    "main.js.map": "/rubiks-cube-simulator/static/js/main.2baaf994.chunk.js.map",
     "runtime-main.js": "/rubiks-cube-simulator/static/js/runtime-main.2b195047.js",
     "runtime-main.js.map": "/rubiks-cube-simulator/static/js/runtime-main.2b195047.js.map",
-    "static/js/2.8cab3ae5.chunk.js": "/rubiks-cube-simulator/static/js/2.8cab3ae5.chunk.js",
-    "static/js/2.8cab3ae5.chunk.js.map": "/rubiks-cube-simulator/static/js/2.8cab3ae5.chunk.js.map",
+    "static/js/2.fa29e34c.chunk.js": "/rubiks-cube-simulator/static/js/2.fa29e34c.chunk.js",
+    "static/js/2.fa29e34c.chunk.js.map": "/rubiks-cube-simulator/static/js/2.fa29e34c.chunk.js.map",
     "static/js/3.fdd691f9.chunk.js": "/rubiks-cube-simulator/static/js/3.fdd691f9.chunk.js",
     "static/js/3.fdd691f9.chunk.js.map": "/rubiks-cube-simulator/static/js/3.fdd691f9.chunk.js.map",
     "index.html": "/rubiks-cube-simulator/index.html",
-    "static/css/main.98ecc72e.chunk.css.map": "/rubiks-cube-simulator/static/css/main.98ecc72e.chunk.css.map",
-    "static/js/2.8cab3ae5.chunk.js.LICENSE.txt": "/rubiks-cube-simulator/static/js/2.8cab3ae5.chunk.js.LICENSE.txt"
+    "static/css/main.82ac8c84.chunk.css.map": "/rubiks-cube-simulator/static/css/main.82ac8c84.chunk.css.map",
+    "static/js/2.fa29e34c.chunk.js.LICENSE.txt": "/rubiks-cube-simulator/static/js/2.fa29e34c.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2b195047.js",
-    "static/js/2.8cab3ae5.chunk.js",
-    "static/css/main.98ecc72e.chunk.css",
-    "static/js/main.eb1d29d6.chunk.js"
+    "static/js/2.fa29e34c.chunk.js",
+    "static/css/main.82ac8c84.chunk.css",
+    "static/js/main.2baaf994.chunk.js"
   ]
 }
